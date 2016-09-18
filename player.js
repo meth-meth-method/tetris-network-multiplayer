@@ -49,7 +49,7 @@ class Player
         if (this.arena.collide(this)) {
             this.arena.clear();
             this.score = 0;
-            updateScore();
+            this.tetris.updateScore(0);
         }
     }
 
