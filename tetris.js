@@ -21,17 +21,18 @@ class Tetris
             '#3877FF',
         ];
 
+        this._frameId = 0;
+
         let lastTime = 0;
-        const update = (time = 0) => {
+        this.update = (time = 0) => {
             const deltaTime = time - lastTime;
             lastTime = time;
 
             this.player.update(deltaTime);
 
             this.draw();
-            requestAnimationFrame(update);
+            this.run();
         };
-        update();
 
         this.updateScore(0);
     }
@@ -59,8 +60,14 @@ class Tetris
         });
     }
 
+    run()
+    {
+        this._frameId = requestAnimationFrame(this.update);
+    }
+
     updateScore(score)
     {
-        this.element.querySelector('.score').innerText = score;
+        console.info('Update score ignored');
+        //this.element.querySelector('.score').innerText = score;
     }
 }

@@ -4,11 +4,14 @@
     <style>
         body {
             background: #000;
-            display: flex;
             color: #fff;
             font-family: sans-serif;
             font-size: 2em;
             text-align: center;
+        }
+
+        .players {
+            display: flex;
         }
 
         .player {
@@ -22,16 +25,22 @@
     </style>
 </head>
 <body>
-    <div class="player">
-        <div class="score"></div>
-        <canvas class="tetris" width="240" height="400"></canvas>
+    <div class="players">
+        <template class="player">
+            <div class="player">
+                <div class="score"></div>
+                <canvas class="tetris" width="240" height="400"></canvas>
+            </div>
+        </template>
     </div>
 
-    <div class="player">
+    <!--<div class="player">
         <div class="score"></div>
         <canvas class="tetris" width="240" height="400"></canvas>
-    </div>
+    </div>-->
 
+    <script src="game-controller.js"></script>
+    <script src="events.js"></script>
     <script src="arena.js"></script>
     <script src="player.js"></script>
     <script src="tetris.js"></script>

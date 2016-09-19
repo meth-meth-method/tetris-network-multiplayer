@@ -5,6 +5,8 @@ class Player
         this.DROP_SLOW = 1000;
         this.DROP_FAST = 50;
 
+        this.event = new Events();
+
         this.tetris = tetris;
         this.arena = tetris.arena;
 
@@ -24,9 +26,12 @@ class Player
         if (this.arena.collide(this)) {
             this.pos.y--;
             this.arena.merge(this);
+            this.event.emit('arena-update');
             this.reset();
             this.score += this.arena.sweep();
             this.tetris.updateScore(this.score);
+        } else {
+            this.event.emit('position-update');
         }
         this.dropCounter = 0;
     }
@@ -36,7 +41,10 @@ class Player
         this.pos.x += dir;
         if (this.arena.collide(this)) {
             this.pos.x -= dir;
+            return;
         }
+
+        this.event.emit('position-update');
     }
 
     reset()
@@ -48,9 +56,13 @@ class Player
                      (this.matrix[0].length / 2 | 0);
         if (this.arena.collide(this)) {
             this.arena.clear();
+            this.event.emit('arena-update');
             this.score = 0;
             this.tetris.updateScore(0);
         }
+
+        this.event.emit('position-update');
+        this.event.emit('matrix-update');
     }
 
     rotate(dir)
@@ -67,6 +79,8 @@ class Player
                 return;
             }
         }
+
+        this.event.emit('matrix-update');
     }
 
     _rotateMatrix(matrix, dir)
