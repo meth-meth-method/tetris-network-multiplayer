@@ -1,18 +1,10 @@
 const WebSocketServer = require('ws').Server;
 const Session = require('./session');
+const Client = require('./client');
 
 const server = new WebSocketServer({port: 9000});
 
 const sessions = new Map;
-
-class Client
-{
-    constructor(conn)
-    {
-        this.conn = conn;
-        this.session = null;
-    }
-}
 
 function createId(len = 6, chars = 'abcdefghjkmnopqrstvwxyz01234567890') {
     let id = '';
