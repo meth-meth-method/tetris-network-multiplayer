@@ -84,6 +84,8 @@ server.on('connection', conn => {
             }
         }
 
+        broadcastSession(session);
+
         console.log(sessions);
     });
 });
