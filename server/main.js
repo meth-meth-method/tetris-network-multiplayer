@@ -14,6 +14,10 @@ function createId(len = 6, chars = 'abcdefghjkmnopqrstvwxyz01234567890') {
     return id;
 }
 
+function createClient(conn, id = createId()) {
+    return new Client(conn, id);
+}
+
 function createSession(id = createId()) {
     if (sessions.has(id)) {
         throw new Error(`Session ${id} already exists`);
@@ -34,7 +38,7 @@ function getSession(id) {
 
 server.on('connection', conn => {
     console.log('Connection established');
-    const client = new Client(conn);
+    const client = createClient(conn);
 
     conn.on('message', msg => {
         console.log('Message received', msg);

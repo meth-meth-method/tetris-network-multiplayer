@@ -1,8 +1,9 @@
 class Client
 {
-    constructor(conn)
+    constructor(conn, id)
     {
         this.conn = conn;
+        this.id = id;
         this.session = null;
     }
 
