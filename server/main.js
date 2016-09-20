@@ -35,6 +35,18 @@ function getSession(id) {
     return sessions.get(id);
 }
 
+function broadcastSession(session) {
+    const clients = [...session.clients];
+    clients.forEach(client => {
+        client.send({
+            type: 'session-broadcast',
+            peers: {
+                you: client.id,
+                clients: clients.map(client => client.id),
+            },
+        });
+    });
+}
 
 server.on('connection', conn => {
     console.log('Connection established');
@@ -55,6 +67,8 @@ server.on('connection', conn => {
         } else if (data.type === 'join-session') {
             const session = getSession(data.id) || createSession(data.id);
             session.join(client);
+
+            broadcastSession(session);
         }
 
         console.log(sessions);
