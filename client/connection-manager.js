@@ -15,6 +15,7 @@ class ConnectionManager
         this.conn.addEventListener('open', () => {
             console.log('Connection established');
             this.initSession();
+            this.watchEvents();
         });
 
         this.conn.addEventListener('message', event => {
@@ -36,6 +37,33 @@ class ConnectionManager
                 type: 'create-session',
             });
         }
+    }
+
+    watchEvents()
+    {
+        const local = this.tetrisManager.instances[0];
+
+        const player = local.player;
+        ['pos', 'matrix', 'score'].forEach(prop => {
+            player.events.listen(prop, () => {
+                this.send({
+                    type: 'state-update',
+                    fragment: 'player',
+                    player: [prop, player[prop]],
+                });
+            });
+        });
+
+        const arena = local.arena;
+        ['matrix'].forEach(prop => {
+            arena.events.listen(prop, () => {
+                this.send({
+                    type: 'state-update',
+                    fragment: 'arena',
+                    arena: [prop, arena[prop]],
+                });
+            });
+        });
     }
 
     updateManager(peers)
