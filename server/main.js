@@ -31,6 +31,9 @@ server.on('connection', conn => {
                 type: 'session-created',
                 id: session.id,
             });
+        } else if (data.type === 'join-session') {
+            const session = sessions.get(data.id);
+            session.join(client);
         }
 
         console.log(sessions);
@@ -45,5 +48,7 @@ server.on('connection', conn => {
                 sessions.delete(session.id);
             }
         }
+
+        console.log(sessions);
     });
 });
