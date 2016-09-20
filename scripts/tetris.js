@@ -12,6 +12,9 @@ class Tetris
         this.player.events.listen('score', score => {
             this.updateScore(score);
         });
+        this.player.events.listen('pos', pos => {
+            console.log(pos);
+        });
 
         this.colors = [
             null,
