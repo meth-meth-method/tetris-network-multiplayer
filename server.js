@@ -19,9 +19,9 @@ class Session
         this.id = createId();
         this.players = new Set;
     }
-    cast(type, data)
+    cast(msg)
     {
-        this.players.forEach(player => player.send(type, data));
+        this.players.forEach(player => player.send(msg));
     }
 }
 
@@ -33,31 +33,32 @@ class Player
         this.conn = conn;
         this.session = null;
     }
-    cast(type, data)
+    cast(msg)
     {
         if (!this.session) {
             console.warn('Cast without session', type, data);
             return;
         }
 
-        console.log('Broadcasting message', type, data);
+        msg.sender = this.id;
+        console.log('Broadcasting message', msg);
 
         this.session.players.forEach(player => {
             if (player === this) {
                 return;
             }
-            player.send(type, data);
+            player.send(msg);
         });
     }
-    send(type, data)
+    send(msg)
     {
-        const msg = JSON.stringify({
-            type,
-            data,
-            playerId: this.id,
+        const json = JSON.stringify(msg);
+        console.log('Sending message to', this.id, json);
+        this.conn.send(json, (err) => {
+            if (err) {
+                console.error('Error sending', json, err);
+            }
         });
-
-        this.conn.send(msg);
     }
 }
 
@@ -68,38 +69,46 @@ server.on('connection', conn => {
     const player = new Player(conn);
     players.set(conn, player);
 
+    console.log('Connection established', player.id);;
+
     conn.on('message', msg => {
         console.log('Incoming message', msg);
         const {type, data} = JSON.parse(msg);
         if (type === 'create-session') {
-            const session = {
-                id: createId(),
-                players: new Set([player]),
-            }
+            const session = new Session();
             console.log('Creating session', session);
-
-            sessions.set(session.id, session);
+            session.players.add(player);
             player.session = session;
-            player.send('session-id', session.id);
+            sessions.set(session.id, session);
+            player.send({
+                type: 'session-id',
+                data: session.id,
+            });
         } else if (type === 'join-session') {
             const sessionId = data;
             if (!sessions.has(sessionId)) {
                 console.warn('Tried to join unstarted session', sessionId);
                 return;
             }
-
             const session = sessions.get(sessionId);
             console.log('Joining session', session);
-
             session.players.add(player);
             player.session = session;
-            player.cast('join-session', player.id);
 
-
+            const players = [...session.players];
+            players.forEach(player => {
+                player.send({
+                    type: 'players-available',
+                    data: {
+                        you: player.id,
+                        others: players.filter(p => p !== player).map(p => p.id),
+                    },
+                });
+            });
         } else if (type.startsWith('player-')) {
             const player = players.get(conn);
             if (player.session) {
-                player.cast(type, data);
+                player.cast({type, data});
             }
         }
     });

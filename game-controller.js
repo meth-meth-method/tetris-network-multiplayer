@@ -12,21 +12,29 @@ class GameController
 
         this.connection = new WebSocket('ws://localhost:8080');
         this.connection.addEventListener('message', event => {
+            console.log('Received message', event, event.data);
             const msg = JSON.parse(event.data);
-            console.log(msg);;
+
             if (msg.type === 'session-id') {
                 window.location.hash = msg.data;
             } else if (msg.type === 'join-session') {
-                const sessionId = msg.data;
-                const tetris = this.addPlayer();
-                this.playerMap.set(sessionId, tetris);
+
+            } else if (msg.type === 'players-available') {
+                console.log(msg);
+                msg.data.others.forEach(playerId => {
+                    if (!this.playerMap.has(playerId)) {
+                        const tetris = this.addPlayer();
+                        this.playerMap.set(playerId, tetris);
+                    }
+                });
             } else if (msg.type.startsWith('player-')) {
                 this.handlePlayerMessage(msg)
 
             }
         });
         this.connection.addEventListener('open', () => {
-            console.log('open!!');
+            console.log('Connection open');
+
             const sessionId = window.location.hash.split('#')[1];
             if (sessionId) {
                 this.send('join-session', sessionId);
@@ -59,19 +67,19 @@ class GameController
 
     handlePlayerMessage(msg)
     {
-        if (!this.playerMap.has(msg.playerId)) {
-            console.warn('Player id not found', msg.playerId);
+        if (!this.playerMap.has(msg.sender)) {
+            console.warn('Player id not found', msg.sender);
             return;
         }
-        const tetris = this.playerMap.get(msg.playerId);
+        const tetris = this.playerMap.get(msg.sender);
         const player = tetris.player;
-        if (type === 'player-position') {
-            player.pos.x = data.x;
-            player.pos.y = data.y;
-        } else if (type === 'player-matrix') {
-            player.matrix = data;
-        } else if (type === 'player-arena') {
-            tetris.arena.matrix = data;
+        if (msg.type === 'player-position') {
+            player.pos.x = msg.data.x;
+            player.pos.y = msg.data.y;
+        } else if (msg.type === 'player-matrix') {
+            player.matrix = msg.data;
+        } else if (msg.type === 'player-arena') {
+            tetris.arena.matrix = msg.data;
         }
         tetris.draw();
     }
@@ -79,9 +87,11 @@ class GameController
     send(type, data)
     {
         if (this.connection.readyState !== 1) {
+            console.warn('Connection not ready');
             return;
         }
         const msg = JSON.stringify({type, data});
+        console.log('Sending message', msg);
         this.connection.send(msg);
     }
 }
