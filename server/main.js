@@ -26,6 +26,7 @@ server.on('connection', conn => {
             const session = new Session(id);
             session.join(client);
             sessions.set(session.id, session);
+            client.send(session.id);
         }
 
         console.log(sessions);
