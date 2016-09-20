@@ -29,7 +29,7 @@ class Player
             this.event.emit('arena-update');
             this.reset();
             this.score += this.arena.sweep();
-            this.tetris.updateScore(this.score);
+            this.event.emit('score-update');
         } else {
             this.event.emit('position-update');
         }
@@ -58,7 +58,7 @@ class Player
             this.arena.clear();
             this.event.emit('arena-update');
             this.score = 0;
-            this.tetris.updateScore(0);
+            this.event.emit('score-update');
         }
 
         this.event.emit('position-update');

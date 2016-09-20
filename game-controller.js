@@ -27,6 +27,9 @@ class GameController
 
             const tetris = this.tetri[0];
             const player = tetris.player;
+            player.event.listen('score-update', () => {
+                this.sendPlayerScore(player);
+            });
             player.event.listen('position-update', () => {
                 this.sendPlayerPosition(player);
             });
@@ -99,6 +102,8 @@ class GameController
             player.matrix = msg.data;
         } else if (msg.type === 'player-arena') {
             tetris.arena.matrix = msg.data;
+        } else if (msg.type === 'player-score') {
+            tetris.updateScore(msg.data);
         }
         tetris.draw();
     }
@@ -108,6 +113,7 @@ class GameController
         this.sendArenaMatrix(tetris.arena);
         this.sendPlayerPosition(tetris.player);
         this.sendPlayerMatrix(tetris.player);
+        this.sendPlayerScore(tetris.player);
     }
 
     sendArenaMatrix(arena)
@@ -118,6 +124,11 @@ class GameController
     sendPlayerPosition(player)
     {
         this.send('player-position', player.pos);
+    }
+
+    sendPlayerScore(player)
+    {
+        this.send('player-score', player.score);
     }
 
     sendPlayerMatrix(player)

@@ -10,6 +10,10 @@ class Tetris
         this.arena = new Arena(12, 20);
         this.player = new Player(this);
 
+        this.player.event.listen('score-update', () => {
+            this.updateScore(this.player.score);
+        });
+
         this.colors = [
             null,
             '#FF0D72',
@@ -67,7 +71,6 @@ class Tetris
 
     updateScore(score)
     {
-        console.info('Update score ignored');
-        //this.element.querySelector('.score').innerText = score;
+        this.element.querySelector('.score').innerText = score;
     }
 }

@@ -53,6 +53,7 @@ class Player
             player: {
                 pos: {x: 0, y: 0},
                 matrix: [],
+                score: 0,
             },
         };
     }
