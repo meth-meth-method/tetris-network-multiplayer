@@ -44,23 +44,23 @@ class ConnectionManager
         const local = this.tetrisManager.instances[0];
 
         const player = local.player;
-        ['pos', 'matrix', 'score'].forEach(prop => {
-            player.events.listen(prop, () => {
+        ['pos', 'matrix', 'score'].forEach(key => {
+            player.events.listen(key, () => {
                 this.send({
                     type: 'state-update',
                     fragment: 'player',
-                    player: [prop, player[prop]],
+                    state: [key, player[key]],
                 });
             });
         });
 
         const arena = local.arena;
-        ['matrix'].forEach(prop => {
-            arena.events.listen(prop, () => {
+        ['matrix'].forEach(key => {
+            arena.events.listen(key, () => {
                 this.send({
                     type: 'state-update',
                     fragment: 'arena',
-                    arena: [prop, arena[prop]],
+                    state: [key, arena[key]],
                 });
             });
         });
