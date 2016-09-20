@@ -1,6 +1,7 @@
 const tetrisManager = new TetrisManager(document);
 const tetrisLocal = tetrisManager.createPlayer();
 tetrisLocal.element.classList.add('local');
+tetrisLocal.run();
 
 const connectionManager = new ConnectionManager(tetrisManager);
 connectionManager.connect('ws://localhost:9000');
