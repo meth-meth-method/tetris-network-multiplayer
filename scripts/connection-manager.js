@@ -83,6 +83,10 @@ class ConnectionManager
                 this.peers.delete(id);
             }
         });
+
+        const local = this.tetrisManager.instances[0];
+        const sorted = peers.clients.map(id => this.peers.get(id) || local);
+        this.tetrisManager.sortPlayers(sorted);
     }
 
     updatePeer(id, fragment, [key, value])

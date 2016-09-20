@@ -29,4 +29,11 @@ class TetrisManager
 
         this.instances = this.instances.filter(instance => instance !== tetris);
     }
+
+    sortPlayers(tetri)
+    {
+        tetri.forEach(tetris => {
+            this.document.body.appendChild(tetris.element);
+        });
+    }
 }
