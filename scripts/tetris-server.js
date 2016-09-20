@@ -12,6 +12,14 @@ class Session
     }
 }
 
+function createId(len = 6, chars = 'abcdefghjkmnopqrstvwxyz01234567890') {
+    let id = '';
+    while (len--) {
+        id += chars[Math.random() * chars.length | 0];
+    }
+    return id;
+}
+
 server.on('connection', conn => {
     console.log('Connection established');
 
@@ -19,7 +27,8 @@ server.on('connection', conn => {
         console.log('Message received', msg);
 
         if (msg === 'create-session') {
-            const session = new Session('foobar');
+            const id = createId();
+            const session = new Session(id);
             sessions.set(session.id, session);
         }
 
