@@ -22,15 +22,12 @@
     </style>
 </head>
 <body>
-    <div class="player">
-        <div class="score"></div>
-        <canvas class="tetris" width="240" height="400"></canvas>
-    </div>
-
-    <div class="player">
-        <div class="score"></div>
-        <canvas class="tetris" width="240" height="400"></canvas>
-    </div>
+    <template id="player-template">
+        <div class="player">
+            <div class="score"></div>
+            <canvas class="tetris" width="240" height="400"></canvas>
+        </div>
+    </template>
 
     <script src="tetris-manager.js"></script>
     <script src="arena.js"></script>

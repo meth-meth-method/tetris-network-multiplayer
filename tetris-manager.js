@@ -7,6 +7,7 @@ class TetrisManager
 
         const playerElements = this.document.querySelectorAll('.player');
         [...playerElements].forEach(element => {
+            console.log(element);
             const tetris = new Tetris(element);
             this.tetri.push(tetris);
         });
