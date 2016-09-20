@@ -14,5 +14,9 @@ class ConnectionManager
 
             this.conn.send('create-session');
         });
+
+        this.conn.addEventListener('message', event => {
+            console.log('Received message', event.data);
+        });
     }
 }
