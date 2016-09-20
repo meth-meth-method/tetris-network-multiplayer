@@ -20,4 +20,9 @@ class TetrisManager
 
         return tetris;
     }
+
+    removePlayer(tetris)
+    {
+        this.document.body.removeChild(tetris.element);
+    }
 }
