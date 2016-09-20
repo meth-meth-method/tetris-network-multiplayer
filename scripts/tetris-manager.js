@@ -5,7 +5,7 @@ class TetrisManager
         this.document = document;
         this.template = this.document.querySelector('#player-template');
 
-        this.tetri = [];
+        this.instances = [];
     }
 
     createPlayer()
@@ -18,11 +18,15 @@ class TetrisManager
 
         this.document.body.appendChild(tetris.element);
 
+        this.instances.push(tetris);
+
         return tetris;
     }
 
     removePlayer(tetris)
     {
         this.document.body.removeChild(tetris.element);
+
+        this.instances = this.instances.filter(instance => instance !== tetris);
     }
 }
