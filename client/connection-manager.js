@@ -85,6 +85,22 @@ class ConnectionManager
         });
     }
 
+    updatePeer(id, fragment, [key, value])
+    {
+        if (!this.peers.has(id)) {
+            throw new Error('Client does not exist', id);
+        }
+
+        const tetris = this.peers.get(id);
+        tetris[fragment][key] = value;
+
+        if (key === 'score') {
+            tetris.updateScore(value);
+        } else {
+            tetris.draw();
+        }
+    }
+
     receive(msg)
     {
         const data = JSON.parse(msg);
@@ -92,6 +108,8 @@ class ConnectionManager
             window.location.hash = data.id;
         } else if (data.type === 'session-broadcast') {
             this.updateManager(data.peers);
+        } else if (data.type === 'state-update') {
+            this.updatePeer(data.clientId, data.fragment, data.state);
         }
     }
 
