@@ -9,6 +9,9 @@ class Tetris
 
         this.arena = new Arena(12, 20);
         this.player = new Player(this);
+        this.player.events.listen('score', score => {
+            this.updateScore(score);
+        });
 
         this.colors = [
             null,
