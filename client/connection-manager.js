@@ -18,7 +18,16 @@ class ConnectionManager
 
         this.conn.addEventListener('message', event => {
             console.log('Received message', event.data);
+            this.receive(event.data);
         });
+    }
+
+    receive(msg)
+    {
+        const data = JSON.parse(msg);
+        if (data.type === 'session-created') {
+            window.location.hash = data.id;
+        }
     }
 
     send(data)
