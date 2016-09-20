@@ -76,7 +76,7 @@ class Player
     send(msg)
     {
         const json = JSON.stringify(msg);
-        console.log(`Sending message from ${this.id} ${json}`);
+        console.log(`Sending message to ${this.id} ${json}`);
         this.conn.send(json, function ack(err) {
             if (err) {
                 console.error('Error sending', json, err);
