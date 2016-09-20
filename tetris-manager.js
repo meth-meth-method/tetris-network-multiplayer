@@ -4,7 +4,6 @@ class TetrisManager
     {
         this.document = document;
         this.template = this.document.querySelector('#player-template');
-        console.log(this.template);
 
         this.tetri = [];
 
