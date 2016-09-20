@@ -104,6 +104,9 @@ class Player
             this.score = 0;
             this.events.emit('score', this.score);
         }
+
+        this.events.emit('pos', this.pos);
+        this.events.emit('matrix', this.matrix);
     }
 
     rotate(dir)
@@ -120,6 +123,7 @@ class Player
                 return;
             }
         }
+        this.events.emit('matrix', this.matrix);
     }
 
     _rotateMatrix(matrix, dir)
