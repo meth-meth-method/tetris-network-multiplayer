@@ -73,23 +73,24 @@ class ConnectionManager
     updateManager(peers)
     {
         const me = peers.you;
-        const clients = peers.clients.filter(id => me !== id);
-        clients.forEach(id => {
-            if (!this.peers.has(id)) {
+        const clients = peers.clients.filter(client => me !== client.id);
+        clients.forEach(client => {
+            if (!this.peers.has(client.id)) {
                 const tetris = this.tetrisManager.createPlayer();
-                this.peers.set(id, tetris);
+                tetris.unserialize(client.state);
+                this.peers.set(client.id, tetris);
             }
         });
 
         [...this.peers.entries()].forEach(([id, tetris]) => {
-            if (clients.indexOf(id) === -1) {
+            if (!clients.some(client => client.id === id)) {
                 this.tetrisManager.removePlayer(tetris);
                 this.peers.delete(id);
             }
         });
 
         const local = this.tetrisManager.instances[0];
-        const sorted = peers.clients.map(id => this.peers.get(id) || local);
+        const sorted = peers.clients.map(client => this.peers.get(client.id) || local);
         this.tetrisManager.sortPlayers(sorted);
     }
 
