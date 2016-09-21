@@ -6,6 +6,7 @@ class ConnectionManager
         this.peers = new Map;
 
         this.tetrisManager = tetrisManager;
+        this.localTetris = this.tetrisManager.instances[0];
     }
 
     connect(address)
@@ -27,14 +28,17 @@ class ConnectionManager
     initSession()
     {
         const sessionId = window.location.hash.split('#')[1];
+        const state = this.localTetris.serialize();
         if (sessionId) {
             this.send({
                 type: 'join-session',
                 id: sessionId,
+                state,
             });
         } else {
             this.send({
                 type: 'create-session',
+                state,
             });
         }
     }
