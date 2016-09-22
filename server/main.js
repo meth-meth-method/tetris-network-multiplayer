@@ -82,7 +82,6 @@ server.on('connection', conn => {
             client.broadcast(data);
         }
 
-        console.log(sessions);
     });
 
     conn.on('close', () => {
