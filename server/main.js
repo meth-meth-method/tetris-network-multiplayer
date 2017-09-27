@@ -1,4 +1,4 @@
-const serve = require('serve');
+const express = require('express');
 const WebSocketServer = require('ws').Server;
 const Session = require('./session');
 const Client = require('./client');
@@ -50,13 +50,14 @@ function broadcastSession(session) {
     });
 }
 
-
-const wss = new WebSocketServer({port: 9000});
-const server = serve('./public', {
-  port: process.env.PORT,
-});
-
 const sessions = new Map;
+
+const server = express();
+const wss = new WebSocketServer({server});
+
+server.use(express.static('./public'));
+server.listen(process.env.PORT);
+
 
 wss.on('connection', conn => {
     console.log('Connection established');

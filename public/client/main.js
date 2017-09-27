@@ -4,7 +4,7 @@ tetrisLocal.element.classList.add('local');
 tetrisLocal.run();
 
 const connectionManager = new ConnectionManager(tetrisManager);
-connectionManager.connect('ws://' + window.location.hostname + ':9000');
+connectionManager.connect('ws://' + window.location.hostname + '');
 
 const keyListener = (event) => {
     [

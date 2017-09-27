@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/meth-meth-method/tetris-network-multiplayer#readme",
   "dependencies": {
+    "express": "^4.15.5",
     "serve": "^6.1.0",
     "ws": "^3.2.0"
   }
