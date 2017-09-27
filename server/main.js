@@ -1,3 +1,4 @@
+const http = require('http');
 const express = require('express');
 const WebSocketServer = require('ws').Server;
 const Session = require('./session');
@@ -52,10 +53,12 @@ function broadcastSession(session) {
 
 const sessions = new Map;
 
-const server = express();
+const app = express();
+app.use(express.static('./public'));
+
+const server = http.createServer(app);
 const wss = new WebSocketServer({server});
 
-server.use(express.static('./public'));
 server.listen(process.env.PORT);
 
 
