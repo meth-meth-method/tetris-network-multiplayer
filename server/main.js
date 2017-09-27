@@ -1,10 +1,7 @@
+const serve = require('serve');
 const WebSocketServer = require('ws').Server;
 const Session = require('./session');
 const Client = require('./client');
-
-const server = new WebSocketServer({port: 9000});
-
-const sessions = new Map;
 
 function createId(len = 6, chars = 'abcdefghjkmnopqrstvwxyz01234567890') {
     let id = '';
@@ -53,7 +50,15 @@ function broadcastSession(session) {
     });
 }
 
-server.on('connection', conn => {
+
+const wss = new WebSocketServer({port: 9000});
+const server = serve('./public', {
+  port: process.env.PORT,
+});
+
+const sessions = new Map;
+
+wss.on('connection', conn => {
     console.log('Connection established');
     const client = createClient(conn);
 

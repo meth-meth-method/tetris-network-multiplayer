@@ -1,0 +1,24 @@
+{
+  "name": "tetris-network-multiplayer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/main.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/meth-meth-method/tetris-network-multiplayer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/meth-meth-method/tetris-network-multiplayer/issues"
+  },
+  "homepage": "https://github.com/meth-meth-method/tetris-network-multiplayer#readme",
+  "dependencies": {
+    "serve": "^6.1.0",
+    "ws": "^3.2.0"
+  }
+}
